@@ -46,6 +46,7 @@ class BookController extends Controller
     public function store(Request $request)
     {
         //
+        
         $book = Book::create($request->all());
 
         return response()->json($book, 201);
@@ -95,4 +96,24 @@ class BookController extends Controller
         $book->delete();
         return 204;
     }
+
+
+    public function getSearchResults(Request $request) {
+
+        $data = $request->get('data');
+
+        $search_books = Book::where('id', 'like', "%{$data}%")
+                         ->orWhere('isbn', 'like', "%{$data}%")
+                         ->orWhere('title', 'like', "%{$data}%")
+                         ->orWhere('published', 'like', "%{$data}%")
+                         ->orWhere('subtitle', 'like', "%{$data}%")
+                         ->orWhere('rating', 'like', "%{$data}%")
+                         ->orWhere('description', 'like', "%{$data}%")
+                         ->get();
+
+        return Response::json([
+            'data' => $search_drivers
+        ]);     
+    }
+
 }
