@@ -100,28 +100,34 @@ class BookController extends Controller
 
     public function getSearchResults(Request $request, $suche) {
 
-    
-          //  $search_books2 = Author::with('books.thumbnails')->where('author_name', 'like', "%{$suche}%")->get();
-            $search_books = Book::with(
-                    array('authors' => function($query)
-                            {
-                                $query->where('author_name', 'like', "%R%");
-                            
-                            }) 
-                        
-                             , 'thumbnails'
-                        )->where('isbn', 'like', "%{$suche}%")
-                         ->orWhere('title', 'like', "%{$suche}%")
-                         ->orWhere('published', 'like', "%{$suche}%")
-                         ->orWhere('subtitle', 'like', "%{$suche}%")
-                         ->orWhere('rating', 'like', "%{$suche}%")
-                         ->orWhere('description', 'like', "%{$suche}%") 
-                        // ->orWhere('authors.author_name', 'like', "%{$suche}%")  
-                                 
-                         ->get(); 
 
 
-dd($search_books);
+
+          //  $search_books = Author::with('books.thumbnails')->where('author_name', 'like', "%{$suche}%")->get();
+
+            $search_books = Book::with('authors', 'thumbnails')
+            ->whereHas('authors', function($query) use ($suche)
+                {
+                    $query->where('author_name', 'like', "%{$suche}%");
+
+                }
+
+            )->orWhere('isbn', 'like', "%{$suche}%")
+               // ->orWhere('title', 'like', "%{$suche}%")
+                ->orWhere('published', 'like', "%{$suche}%")
+                ->orWhere('subtitle', 'like', "%{$suche}%")
+                ->orWhere('rating', 'like', "%{$suche}%")
+                ->orWhere('description', 'like', "%{$suche}%")
+                // ->orWhere('authors.author_name', 'like', "%{$suche}%")
+
+                ->get();
+
+
+
+
+
+
+//dd($search_books);
                       //   $search_books2 = Author::where('author_name', 'like', "%{$suche}%")->get();
 
 
@@ -131,8 +137,11 @@ dd($search_books);
                    // dump($search_books2);
 
                        //  dump(Book::with('authors', 'thumbnails')->where('isbn', 'like', "%{$suche}%")->get());
-                         return  BookResource::collection($search_books);
-                      //  return $search_books2;
+
+
+        return  BookResource::collection($search_books);
+    //    dd($search_books);
+                   //     return $search_books;
     }
 
 }
