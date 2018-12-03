@@ -37,3 +37,4 @@ Route::get('books', 'BookController@index');
 Route::post('books', 'BookController@store');
 Route::put('books/{id}', 'ArticlBookControllereController@update');
 Route::delete('books/{isbn}', 'BookController@destroy');
+Route::get('books/search/{suche}', 'BookController@getSearchResults');

@@ -16,4 +16,12 @@ class author extends Model
         return $this->belongsToMany('App\book');
     }
 
+    /*
+    public function authors()
+    {
+        return $this->belongsToMany('App\book');
+    }
+    */
+    
+
 }
